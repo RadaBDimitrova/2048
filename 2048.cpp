@@ -173,27 +173,25 @@ void drawBoard(int** arr, int size) {
 	printBoard(arr, size);
 	moveTiles(arr, size);
 
-	if (checkPossibleMoves == false)
-	{
-		std::cout << "Game over!" << std::endl;
-		return;
-	}
-	else if (win)
+	if (win(arr, size))
 	{
 		std::cout << "Congrats! You got 2048!" << std::endl;
+		return;
+	}
+	else if (!checkPossibleMoves(arr, size))
+	{
+		std::cout << "Game over!" << std::endl;
 		return;
 	}
 	else
 	{
 	clearConsole();
-	std::cout << score(arr, size) << std::endl; // prints the previous board sum
+	std::cout << "Score: " << score(arr, size) << std::endl; // prints the previous board sum
 	drawBoard(arr, size);
 	}
-
 }
 
-int main()
-{
+void startGame() {
 	char* nickname = new char[100];
 	int dimension = 0;
 	std::cout << "Enter your nickname: ";
@@ -214,6 +212,37 @@ int main()
 	}
 	delete[] board;
 	delete[] nickname;
-	return 0;
+	return;
 }
 
+void startMenu() {
+	std::cout << "1. Start game" << std::endl;
+	std::cout << "2. Leaderboard" << std::endl;
+	std::cout << "3. Quit" << std::endl;
+	int choice;
+	std::cin >> choice;
+	while (choice != 1 && choice != 2 && choice != 3)
+	{
+		std::cout << "Invalid choice. Please enter a number corresponding to the menu options." << std::endl;
+		std::cin >> choice;
+		clearConsole();
+	}
+	clearConsole();
+	switch (choice)
+	{
+	case 1:
+		startGame();
+		break;
+	case 2: //open menu for leaderboard options
+		break;
+	case 3:
+		return;
+	default:
+		break;
+	}
+}
+
+int main()
+{
+	startMenu();
+}
