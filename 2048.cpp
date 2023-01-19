@@ -51,14 +51,23 @@ bool emptyArray(int** arr, int size) {
 
 void insertNewTile(int** arr, int size) {
 	srand(time(0));
-	int x1 = rand() % size;
-	int y1 = rand() % size;
-	while (arr[x1][y1] != 0)
+	int x = rand() % size;
+	int y = rand() % size;
+	while (arr[x][y] != 0)
 	{
-		x1 = rand() % size;
-		y1 = rand() % size;
+		x = rand() % size;
+		y = rand() % size;
 	}
-	arr[x1][y1] = 2;
+	int determineWhether2or4 = rand() % 10;
+	if (determineWhether2or4 == 7) 
+	// 7 is a random number between 0 and 9 in order to get the 10% chance to get 4
+	{
+		arr[x][y] = 4;
+	}
+	else
+	{
+		arr[x][y] = 2;
+	}
 }
 
 void moveTiles(int** arr, int size) {
