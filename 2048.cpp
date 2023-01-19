@@ -61,12 +61,6 @@ void insertNewTile(int** arr, int size) {
 	arr[x1][y1] = 2;
 }
 
-void swap(int& a, int& b) {
-	int c = a;
-	a = b;
-	b = c;
-}
-
 void moveTiles(int** arr, int size) {
 	int score = 0;
 	char direction;
@@ -83,22 +77,27 @@ void moveTiles(int** arr, int size) {
 			for (int j = 0; j < size; j++)
 			{
 				int counter = 0;
-				while (arr[i][j] == 0 && counter<size)
+				while (arr[i][j] == 0 && counter < size)
 				{
 					counter++;
-					/*for (int row = i + 1; row < size - 1; row++)
+					for (int row = i; row < size - 1; row++)
 					{
+						if (arr[row][j] == arr[row + 1][j]) {
+							arr[row][j] *= 2;
+							arr[row + 1][j] = 0;
+						}
 						arr[row][j] = arr[row + 1][j];
+						arr[row + 1][j] = 0;
 					}
-					arr[size - 1][j] = 0;*/
-					int row = i;
+					arr[size - 1][j] = 0;
+					/*int row = i;
 					while (row < size - 1)
 					{
 						arr[row][j] = arr[row + 1][j];
 						arr[row + 1][j] = 0;
 						row++;
 					}
-					arr[size - 1][j] = 0;
+					arr[size - 1][j] = 0;*/
 				}
 				if (arr[i][j] == arr[i + 1][j]) {
 					arr[i][j] *= 2;
@@ -109,10 +108,13 @@ void moveTiles(int** arr, int size) {
 		}
 		break;
 	case's':
+		
 		break;
 	case 'a':
+		
 		break;
 	case 'd':
+		
 		break;
 	default:
 		break;
@@ -141,6 +143,17 @@ int boardState(int** arr, int size) {
 		return 1;
 	}
 	return 0;
+}
+
+bool canContinue(int** arr, int size) {
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+
+		}
+	}
+	return false;
 }
 
 void drawBoard(int** arr, int size) {
