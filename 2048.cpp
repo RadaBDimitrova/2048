@@ -2,16 +2,6 @@
 #include <iomanip>
 #include <cstdlib>
 
-void moveUp(int** arr, int size);
-void moveDown(int** arr, int size);
-void moveLeft(int** arr, int size);
-void moveRight(int** arr, int size);
-void mergeUp(int** arr, int size);
-void mergeDown(int** arr, int size);
-void mergeLeft(int** arr, int size);
-void mergeRight(int** arr, int size);
-
-
 void clearConsole() {
 	std::cout << "\033[;H";
 	std::cout << "\033[J";
@@ -40,20 +30,23 @@ int score(int** arr, int size) {
 	return score;
 }
 
-void initializeBoard(int** arr, int size) {
-	int x1 = rand() % size;
-	int y1 = rand() % size;
-	int x2 = rand() % size;
-	int y2 = rand() % size;
-
-	//in case the coordinates of the first two tiles are the same
-	while (x2 == x1 && y2 == y1) {
-		x2 = rand() % size;
-		y2 = rand() % size;
+bool emptyArray(int** arr, int size) {
+	int count = 0;
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			if (arr[i][j] == 0)
+			{
+				count++;
+			}
+		}
 	}
-
-	arr[x1][y1] = 2;
-	arr[x2][y2] = 2;
+	if (count == size*size)
+	{
+		return true;
+	}
+	return false;
 }
 
 void insertNewTile(int** arr, int size) {
@@ -133,7 +126,7 @@ void moveTiles(int** arr, int size) {
 					}
 					arr[size - 1][j] = 0;*/
 					int row = i;
-					while (row < size - 1 && arr[])
+					while (row < size - 1)
 					{
 						arr[row][j] = arr[row + 1][j];
 						arr[row + 1][j] = 0;
@@ -194,6 +187,10 @@ int boardState(int** arr, int size) {
 }
 
 void drawBoard(int** arr, int size) {
+	if (emptyArray(arr,size))
+	{
+		insertNewTile(arr, size);
+	}
 	insertNewTile(arr, size);
 	printBoard(arr, size);
 	moveTiles(arr, size);
@@ -228,9 +225,7 @@ int main()
 		board[i] = new int[dimension]();
 	}
 
-	initializeBoard(board, dimension);
 	drawBoard(board, dimension);
-
 
 	for (int i = 0; i < dimension; i++) {
 		delete[] board[i];
