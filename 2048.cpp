@@ -42,7 +42,7 @@ bool emptyArray(int** arr, int size) {
 			}
 		}
 	}
-	if (count == size*size)
+	if (count == size * size)
 	{
 		return true;
 	}
@@ -50,7 +50,8 @@ bool emptyArray(int** arr, int size) {
 }
 
 void insertNewTile(int** arr, int size) {
-	int x1 = rand() % size; // error exception unhandled
+	srand(time(0));
+	int x1 = rand() % size;
 	int y1 = rand() % size;
 	while (arr[x1][y1] != 0)
 	{
@@ -59,43 +60,6 @@ void insertNewTile(int** arr, int size) {
 	}
 	arr[x1][y1] = 2;
 }
-
-//void moveUp(int** arr, int size) {
-//	bool updated = false;
-//	for (int i = 0; i < size - 1; i++)
-//	{
-//		for (int j = 0; j < size; j++)
-//		{
-//			if (arr[i][j] == 0)
-//			{
-//				for (int row = i; row < size - 1; row++)
-//				{
-//					arr[row][j] = arr[row + 1][j];
-//				}
-//				arr[size - 1][j] = 0;
-//				updated = true;
-//			}
-//		}
-//	}
-//	if (updated)
-//	{
-//		mergeUp(arr, size);
-//	}
-//}
-
-//void mergeUp(int** arr, int size) {
-//	for (int i = 0; i < size - 1; i++)
-//	{
-//		for (int j = 0; j < size; j++)
-//		{
-//			if (arr[i][j] == arr[i + 1][j]) {
-//				arr[i][j] *= 2;
-//				arr[i + 1][j] = 0;
-//			}
-//		}
-//	}
-//	moveUp(arr, size);
-//}
 
 void swap(int& a, int& b) {
 	int c = a;
@@ -118,9 +82,11 @@ void moveTiles(int** arr, int size) {
 		{
 			for (int j = 0; j < size; j++)
 			{
-				if (arr[i][j] == 0)
+				int counter = 0;
+				while (arr[i][j] == 0 && counter<size)
 				{
-					/*for (int row = i; row < size - 1; row++)
+					counter++;
+					/*for (int row = i + 1; row < size - 1; row++)
 					{
 						arr[row][j] = arr[row + 1][j];
 					}
@@ -137,19 +103,10 @@ void moveTiles(int** arr, int size) {
 				if (arr[i][j] == arr[i + 1][j]) {
 					arr[i][j] *= 2;
 					arr[i + 1][j] = 0;
-					score += arr[i][j];
+					//score += arr[i][j];
 				}
 			}
 		}
-
-		/*if (arr[i][j] == arr[i - 1][j])
-		{
-			arr[i - 1][j] *= 2;
-			arr[i][j] = 0;
-		}
-		else {
-			break;
-		}*/
 		break;
 	case's':
 		break;
@@ -187,7 +144,7 @@ int boardState(int** arr, int size) {
 }
 
 void drawBoard(int** arr, int size) {
-	if (emptyArray(arr,size))
+	if (emptyArray(arr, size))
 	{
 		insertNewTile(arr, size);
 	}
