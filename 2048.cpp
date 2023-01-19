@@ -49,6 +49,23 @@ bool emptyArray(int** arr, int size) {
 	return false;
 }
 
+bool checkPossibleMoves(int** arr, int size) {
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (arr[i][j] == 0) {
+				return true;
+			}
+			if (j < size - 1 && arr[i][j] == arr[i][j + 1]) {
+				return true;
+			}
+			if (i < size - 1 && arr[i][j] == arr[i + 1][j]) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 void insertNewTile(int** arr, int size) {
 	srand(time(0));
 	int x = rand() % size;
@@ -59,8 +76,8 @@ void insertNewTile(int** arr, int size) {
 		y = rand() % size;
 	}
 	int determineWhether2or4 = rand() % 10;
-	if (determineWhether2or4 == 7) 
-	// 7 is a random number between 0 and 9 in order to get the 10% chance to get 4
+	if (determineWhether2or4 == 7)
+		// 7 is a random number between 0 and 9 in order to get the 10% chance to get 4
 	{
 		arr[x][y] = 4;
 	}
@@ -117,13 +134,13 @@ void moveTiles(int** arr, int size) {
 		}
 		break;
 	case's':
-		
+
 		break;
 	case 'a':
-		
+
 		break;
 	case 'd':
-		
+
 		break;
 	default:
 		break;
@@ -131,39 +148,21 @@ void moveTiles(int** arr, int size) {
 }
 
 
-int boardState(int** arr, int size) {
+bool win(int** arr, int size) {
 	int countEmptySlots = 0;
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
 		{
-			if (arr[i][j] == 0)
-			{
-				countEmptySlots++;
-			}
 			if (arr[i][j] == 2048)
 			{
-				return -1;
+				return true;
 			}
-		}
-	}
-	if (countEmptySlots != 0)
-	{
-		return 1;
-	}
-	return 0;
-}
-
-bool canContinue(int** arr, int size) {
-	for (int i = 0; i < size; i++)
-	{
-		for (int j = 0; j < size; j++)
-		{
-
 		}
 	}
 	return false;
 }
+
 
 void drawBoard(int** arr, int size) {
 	if (emptyArray(arr, size))
@@ -174,19 +173,23 @@ void drawBoard(int** arr, int size) {
 	printBoard(arr, size);
 	moveTiles(arr, size);
 
-	if (boardState(arr, size) == 0)
+	if (checkPossibleMoves == false)
 	{
 		std::cout << "Game over!" << std::endl;
 		return;
 	}
-	else if (boardState(arr, size) == -1)
+	else if (win)
 	{
 		std::cout << "Congrats! You got 2048!" << std::endl;
 		return;
 	}
+	else
+	{
 	clearConsole();
 	std::cout << score(arr, size) << std::endl; // prints the previous board sum
 	drawBoard(arr, size);
+	}
+
 }
 
 int main()
