@@ -332,11 +332,13 @@ void drawBoard(int** arr, int size) {
 	{
 		std::cout << "Congrats! You got 2048!" << std::endl;
 		return;
+		clearConsole();
 	}
 	else if (!checkPossibleMoves(arr, size))
 	{
 		std::cout << "Game over!" << std::endl;
 		return;
+		clearConsole();
 	}
 	else
 	{
@@ -470,12 +472,47 @@ void startGame() {
 	}
 	delete[] board;
 	return;
+	startMenu();
 }
 void printLeaderBoard() {
+	int scores[LEADERBOARD_SIZE] = {};
+	char** nickname = new char* [LEADERBOARD_SIZE];
+	for (int i = 0; i < LEADERBOARD_SIZE; i++)
+	{
+		nickname[i] = new char[LEADERBOARD_SIZE];
+	}
+	int dimension;
+	std::cout << "Enter dimension: ";
+	std::cin >> dimension;
+	std::ifstream leaderboard;
+	char* fileName = getFileName(dimension);
+	leaderboard.open(fileName);
 
+	if (!leaderboard.is_open())
+	{
+		std::cout << "Error! Failed to open file\n";
+		for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+			delete[] nickname[i];
+		}
+		delete[] nickname;
+		delete[] fileName;
+		return;
+	}
+
+	for (int i = 0; !leaderboard.eof(); ++i)
+	{
+		leaderboard << nickname[i] << scores[i];
+	}
+	leaderboard.close();
+	for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+		delete[] nickname[i];
+	}
+	delete[] nickname;
+	delete[] fileName;
 }
 
 void startMenu() {
+	std::cout << "START MENU" << std::endl;
 	std::cout << "1. Start game" << std::endl;
 	std::cout << "2. Leaderboard" << std::endl;
 	std::cout << "3. Quit" << std::endl;
