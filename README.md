@@ -13,8 +13,8 @@ File Documentation:
 4. leaderboardXX.txt where XX coresponds to the dimension (between 4 and 10) of the board corresponding to the leaderboard.
 
 Start Menu:
-1.Start Game -> initializes the board and the game
-2.Leaderboard -> shows leaderboard files (top 5 scores for each dimension)
-3.Quit -> ends program
+1. Start Game -> initializes the board and the game;
+2. Leaderboard -> shows leaderboard files (top 5 scores for each dimension);
+3. Quit -> ends program.
 
 
