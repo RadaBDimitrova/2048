@@ -2,6 +2,8 @@
 #include <iomanip>
 #include <cstdlib>
 
+const int LEADERBOARD_SIZE = 5;
+
 void clearConsole() {
 	std::cout << "\033[;H";
 	std::cout << "\033[J";
@@ -87,7 +89,7 @@ void insertNewTile(int** arr, int size) {
 	}
 }
 
-void mergeUpDown(int** arr, int size) {
+void mergeUp(int** arr, int size) { // for now this function is the same as mergeUpDown
 	for (int j = 0; j < size; j++)
 	{
 		for (int i = 0; i < size - 1; i++)
@@ -106,7 +108,7 @@ void mergeUpDown(int** arr, int size) {
 				else if (arr[i][j] == arr[row][j])
 				{
 					arr[i][j] *= 2;
-					arr[row][j] = 0; // this merges all elements that can be merged, for example 4,4,8,16 returns 0,0,0,32
+					arr[row][j] = 0; 
 					break;
 				}
 			}
@@ -114,7 +116,8 @@ void mergeUpDown(int** arr, int size) {
 	}
 }
 
-void mergeDown(int** arr, int size) {
+void mergeUpDown(int** arr, int size, bool direction) {
+	//direction is true for up, false for down
 	for (int j = 0; j < size; j++)
 	{
 		for (int i = 0; i < size - 1; i++)
@@ -132,9 +135,18 @@ void mergeDown(int** arr, int size) {
 				}
 				else if (arr[i][j] == arr[row][j])
 				{
-					arr[row][j] *= 2;
-					arr[i][j] = 0; // this merges all elements that can be merged, for example 4,4,8,16 returns 0,0,0,32
-					break;
+					if (direction)
+					{
+						arr[i][j] *= 2;
+						arr[row][j] = 0;
+						break;
+					}
+					else
+					{
+						arr[row][j] *= 2; // here it changes for down
+						arr[i][j] = 0; // this merges all elements that can be merged, for example 4,4,8,16 returns 0,0,0,32
+						break;
+					}	
 				}
 			}
 		}
@@ -183,8 +195,31 @@ void moveDown(int** arr, int size) {
 	}
 }
 
-void mergeLeftRight(int** arr, int size) {
-
+void mergeLeft(int** arr, int size) {
+	for (int j = 0; j < size; j++)
+	{
+		for (int i = 0; i < size - 1; i++)
+		{
+			for (int row = i + 1; row < size; row++)
+			{
+				if (arr[row][j] == 0)
+				{
+					continue;
+				}
+				if (arr[i][j] == 0)
+				{
+					arr[i][j] = arr[row][j];
+					arr[row][j] = 0;
+				}
+				else if (arr[i][j] == arr[row][j])
+				{
+					arr[i][j] *= 2;
+					arr[row][j] = 0;
+					break;
+				}
+			}
+		}
+	}
 }
 
 void moveLeft(int** arr, int size) {
@@ -199,9 +234,29 @@ void moveLeft(int** arr, int size) {
 				for (int col = j; col < size - 1; col++)
 				{
 					arr[i][col] = arr[i][col + 1];
-					arr[i][col+1] = 0;
+					arr[i][col + 1] = 0;
 				}
-				arr[i][size-1] = 0;
+				arr[i][size - 1] = 0;
+			}
+		}
+	}
+}
+
+void moveRight(int** arr, int size) {
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = size - 1; j > 0; j--)
+		{
+			int counter = 0;
+			while (arr[i][j] == 0 && counter < size)
+			{
+				counter++;
+				for (int col = j; col > 0; col--)
+				{
+					arr[i][col] = arr[i][col - 1];
+					arr[i][col - 1] = 0;
+				}
+				arr[i][0] = 0;
 			}
 		}
 	}
@@ -218,19 +273,20 @@ void moveTiles(int** arr, int size) {
 	switch (direction)
 	{
 	case 'w':
-		mergeUpDown(arr, size);
+		mergeUpDown(arr, size, true);
 		moveUp(arr, size);
 		break;
 	case's':
-		mergeDown(arr, size);
+		mergeUpDown(arr, size, false);
 		moveDown(arr, size);
 		break;
 	case 'a':
-		//mergeLeftRight(arr, size);
+		mergeLeft(arr, size);
 		moveLeft(arr, size);
 		break;
 	case 'd':
-
+		//mergeRight(arr, size);
+		moveRight(arr, size);
 		break;
 	default:
 		break;
@@ -253,7 +309,6 @@ bool win(int** arr, int size) {
 	return false;
 }
 
-
 void drawBoard(int** arr, int size) {
 	if (emptyArray(arr, size))
 	{
@@ -262,7 +317,6 @@ void drawBoard(int** arr, int size) {
 	insertNewTile(arr, size);
 	printBoard(arr, size);
 	moveTiles(arr, size);
-
 	if (win(arr, size))
 	{
 		std::cout << "Congrats! You got 2048!" << std::endl;
@@ -276,9 +330,39 @@ void drawBoard(int** arr, int size) {
 	else
 	{
 		clearConsole();
-		std::cout << "Score: " << score(arr, size) << std::endl; // prints the previous board sum
+		std::cout << "Score: " << score(arr, size) + 2 << std::endl;
 		drawBoard(arr, size);
 	}
+}
+
+
+void updateLeaderBoard(char** name, int score) {
+	int scores[LEADERBOARD_SIZE] = {};
+	char** nickname = new char* [LEADERBOARD_SIZE];
+	for (int i = 0; i < LEADERBOARD_SIZE; i++)
+	{
+		nickname[i] = new char[LEADERBOARD_SIZE];
+	}
+
+	for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+		if (score > scores[i]) {
+			for (int j = LEADERBOARD_SIZE - 1; j > i; j--) {
+				scores[j] = scores[j - 1];
+				nickname[j] = nickname[j - 1];
+			}
+			scores[i] = score;
+			nickname[i] = name[i];
+			break;
+		}
+	}
+	/*for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+		delete[] nickname[i];
+	}
+	delete[] nickname;*/
+}
+
+void LeaderBoard() {
+
 }
 
 void startGame() {
@@ -288,7 +372,10 @@ void startGame() {
 	std::cin >> nickname;
 	std::cout << "Enter dimension: ";
 	std::cin >> dimension;
-
+	while (dimension < 4 || dimension > 10)
+	{
+		std::cin >> dimension;
+	}
 	int** board = new int* [dimension];
 	for (int i = 0; i < dimension; i++)
 	{
@@ -301,7 +388,6 @@ void startGame() {
 		delete[] board[i];
 	}
 	delete[] board;
-	delete[] nickname;
 	return;
 }
 
@@ -323,7 +409,8 @@ void startMenu() {
 	case 1:
 		startGame();
 		break;
-	case 2: //open menu for leaderboard options
+	case 2:
+		LeaderBoard();
 		break;
 	case 3:
 		return;
