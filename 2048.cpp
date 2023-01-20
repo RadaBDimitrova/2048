@@ -4,6 +4,7 @@
 #include <fstream>
 
 const int LEADERBOARD_SIZE = 5;
+void startMenu();
 
 void clearConsole() {
 	std::cout << "\033[;H";
@@ -68,8 +69,20 @@ bool checkPossibleMoves(int** arr, int size) {
 	}
 	return false;
 }
+bool isEmptySpace(int** arr, int size) {
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (arr[i][j] == 0)
+				return true;
+		}
+	}
+	return false;
+}
 
 void insertNewTile(int** arr, int size) {
+	if (!isEmptySpace(arr, size)) {
+		return;
+	}
 	srand(time(NULL));
 	int x = rand() % size;
 	int y = rand() % size;
@@ -331,14 +344,15 @@ void drawBoard(int** arr, int size) {
 	if (win(arr, size))
 	{
 		std::cout << "Congrats! You got 2048!" << std::endl;
-		return;
 		clearConsole();
+		return;
+
 	}
 	else if (!checkPossibleMoves(arr, size))
 	{
 		std::cout << "Game over!" << std::endl;
-		return;
 		clearConsole();
+		return;
 	}
 	else
 	{
@@ -355,6 +369,7 @@ void strCopy(const char* from, char* to) {
 		to[i] = from[i];
 		i++;
 	}
+	to[i] = '\0';
 }
 
 void updateLeaderBoard(int dimension, char* name, int score, char** nickname, int* scores) {
@@ -401,45 +416,48 @@ char* getFileName(int dimension) {
 	return filename;
 }
 
-void LeaderBoard(char* name, int score) {
+void fillLeaderboard(char** nickname, int* scores, char* fileName) {
+	std::ifstream leaderboard;
+	leaderboard.open(fileName);
+
+	if (!leaderboard.is_open())
+	{
+		std::cout << "Error! Failed to open file\n";
+		return;
+	}
+
+	for (int i = 0; !leaderboard.eof(); ++i)
+	{
+		leaderboard >> nickname[i] >> scores[i];
+	}
+	leaderboard.close();
+}
+
+void writeToFile(char** nickname, int* scores, char fileName[]) {
+	std::ofstream newLeaderboard;
+	newLeaderboard.open(fileName, std::ios::trunc);
+	if (!newLeaderboard.is_open()) {
+		return;
+	}
+	for (int i = 0; i < LEADERBOARD_SIZE; ++i)
+	{
+		newLeaderboard << nickname[i] << " " << scores[i] << " ";
+	}
+	newLeaderboard.close();
+}
+
+void LeaderBoard(char* name, int score,int dimension) {
 	int scores[LEADERBOARD_SIZE] = {};
 	char** nickname = new char* [LEADERBOARD_SIZE];
 	for (int i = 0; i < LEADERBOARD_SIZE; i++)
 	{
 		nickname[i] = new char[LEADERBOARD_SIZE];
 	}
-	int dimension;
-	std::cout << "Enter dimension: ";
-	std::cin >> dimension;
-	std::ifstream leaderboard;
 	char* fileName = getFileName(dimension);
-	leaderboard.open(fileName);
-
-	if (!leaderboard.is_open())
-	{
-		std::cout << "Error! Failed to open file\n";
-		for (int i = 0; i < LEADERBOARD_SIZE; i++) {
-			delete[] nickname[i];
-		}
-		delete[] nickname;
-		delete[] fileName;
-		return;
-	}
-
-	for (int i = 0; !leaderboard.eof(); ++i)
-	{
-		leaderboard << nickname[i] << scores[i];
-	}
+	fillLeaderboard(nickname, scores, fileName);
 	updateLeaderBoard(dimension, name, score, nickname, scores);
-	leaderboard.close();
-
-	std::ofstream newLeaderboard;
-	newLeaderboard.open(fileName);
-	for (int i = 0; i < LEADERBOARD_SIZE; ++i)
-	{
-		newLeaderboard >> nickname[i] >> " " >> scores[i] >> " ";
-	}
-
+	writeToFile(nickname, scores, fileName);
+	
 	for (int i = 0; i < LEADERBOARD_SIZE; i++) {
 		delete[] nickname[i];
 	}
@@ -465,14 +483,14 @@ void startGame() {
 	}
 
 	drawBoard(board, dimension);
-	LeaderBoard(nickname, score(board,dimension));
+	LeaderBoard(nickname, score(board,dimension), dimension);
 
 	for (int i = 0; i < dimension; i++) {
 		delete[] board[i];
 	}
 	delete[] board;
-	return;
 	startMenu();
+	return;
 }
 void printLeaderBoard() {
 	int scores[LEADERBOARD_SIZE] = {};
@@ -501,7 +519,7 @@ void printLeaderBoard() {
 
 	for (int i = 0; !leaderboard.eof(); ++i)
 	{
-		leaderboard << nickname[i] << scores[i];
+		leaderboard >> nickname[i] >> scores[i];
 	}
 	leaderboard.close();
 	for (int i = 0; i < LEADERBOARD_SIZE; i++) {
@@ -511,13 +529,28 @@ void printLeaderBoard() {
 	delete[] fileName;
 }
 
+void checkInput(int& num)
+{
+	while (true) {
+		std::cin >> num;
+		if (std::cin.fail()) {
+			std::cout << "Invalid input. Please input a number. " << std::endl;
+			std::cin.clear();
+			std::cin.ignore(100000, '\n');
+		}
+		else {
+			break;
+		}
+	}
+}
+
 void startMenu() {
 	std::cout << "START MENU" << std::endl;
 	std::cout << "1. Start game" << std::endl;
 	std::cout << "2. Leaderboard" << std::endl;
 	std::cout << "3. Quit" << std::endl;
 	int choice;
-	std::cin >> choice;
+	checkInput(choice);
 	while (choice != 1 && choice != 2 && choice != 3)
 	{
 		std::cout << "Invalid choice. Please enter a number corresponding to the menu options." << std::endl;
