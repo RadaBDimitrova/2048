@@ -344,14 +344,14 @@ void drawBoard(int** arr, int size) {
 	if (win(arr, size))
 	{
 		std::cout << "Congrats! You got 2048!" << std::endl;
-		clearConsole();
+		startMenu();
 		return;
 
 	}
 	else if (!checkPossibleMoves(arr, size))
 	{
 		std::cout << "Game over!" << std::endl;
-		clearConsole();
+		startMenu();
 		return;
 	}
 	else
@@ -435,13 +435,13 @@ void fillLeaderboard(char** nickname, int* scores, char* fileName) {
 
 void writeToFile(char** nickname, int* scores, char fileName[]) {
 	std::ofstream newLeaderboard;
-	newLeaderboard.open(fileName, std::ios::trunc);
+	newLeaderboard.open(fileName);
 	if (!newLeaderboard.is_open()) {
 		return;
 	}
 	for (int i = 0; i < LEADERBOARD_SIZE; ++i)
 	{
-		newLeaderboard << nickname[i] << " " << scores[i] << " ";
+		newLeaderboard << nickname[i] << " " << scores[i] << '\n';
 	}
 	newLeaderboard.close();
 }
@@ -545,6 +545,7 @@ void checkInput(int& num)
 }
 
 void startMenu() {
+	clearConsole();
 	std::cout << "START MENU" << std::endl;
 	std::cout << "1. Start game" << std::endl;
 	std::cout << "2. Leaderboard" << std::endl;
@@ -555,7 +556,7 @@ void startMenu() {
 	{
 		std::cout << "Invalid choice. Please enter a number corresponding to the menu options." << std::endl;
 		std::cin >> choice;
-		clearConsole();
+		clearConsole();//check
 	}
 	clearConsole();
 	switch (choice)
