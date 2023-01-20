@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
+#include <fstream>
 
 const int LEADERBOARD_SIZE = 5;
 
@@ -108,7 +109,7 @@ void mergeUp(int** arr, int size) { // for now this function is the same as merg
 				else if (arr[i][j] == arr[row][j])
 				{
 					arr[i][j] *= 2;
-					arr[row][j] = 0; 
+					arr[row][j] = 0;
 					break;
 				}
 			}
@@ -146,7 +147,7 @@ void mergeUpDown(int** arr, int size, bool direction) {
 						arr[row][j] *= 2; // here it changes for down
 						arr[i][j] = 0; // this merges all elements that can be merged, for example 4,4,8,16 returns 0,0,0,32
 						break;
-					}	
+					}
 				}
 			}
 		}
@@ -195,32 +196,42 @@ void moveDown(int** arr, int size) {
 	}
 }
 
-void mergeLeft(int** arr, int size) {
-	for (int j = 0; j < size; j++)
+void mergeRight(int** arr, int size) {
+	for (int i = 0; i < size; i++)
 	{
-		for (int i = 0; i < size - 1; i++)
+		for (int j = 0; j < size - 1; j++)
 		{
-			for (int row = i + 1; row < size; row++)
+			if (arr[i][j] == 0)
 			{
-				if (arr[row][j] == 0)
-				{
-					continue;
-				}
-				if (arr[i][j] == 0)
-				{
-					arr[i][j] = arr[row][j];
-					arr[row][j] = 0;
-				}
-				else if (arr[i][j] == arr[row][j])
-				{
-					arr[i][j] *= 2;
-					arr[row][j] = 0;
-					break;
-				}
+				continue;
+			}
+			if (arr[i][j] == arr[i][j + 1])
+			{
+				arr[i][j + 1] *= 2;
+				arr[i][j] = 0;
 			}
 		}
 	}
 }
+
+void mergeLeft(int** arr, int size) {
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = size - 1; j > 0; j--)
+		{
+			if (arr[i][j] == 0)
+			{
+				continue;
+			}
+			if (arr[i][j] == arr[i][j - 1])
+			{
+				arr[i][j - 1] *= 2;
+				arr[i][j] = 0;
+			}
+		}
+	}
+}
+
 
 void moveLeft(int** arr, int size) {
 	for (int i = 0; i < size; i++)
@@ -273,19 +284,23 @@ void moveTiles(int** arr, int size) {
 	switch (direction)
 	{
 	case 'w':
+		moveUp(arr, size);
 		mergeUpDown(arr, size, true);
 		moveUp(arr, size);
 		break;
 	case's':
+		moveDown(arr, size);
 		mergeUpDown(arr, size, false);
 		moveDown(arr, size);
 		break;
 	case 'a':
+		moveLeft(arr, size);
 		mergeLeft(arr, size);
 		moveLeft(arr, size);
 		break;
 	case 'd':
-		//mergeRight(arr, size);
+		moveRight(arr, size);
+		mergeRight(arr, size);
 		moveRight(arr, size);
 		break;
 	default:
@@ -360,9 +375,57 @@ void updateLeaderBoard(char** name, int score) {
 	}
 	delete[] nickname;*/
 }
+//void openFiles(int dimension) {
+//	std::fstream leaderboard_file("leaderboard.txt");
+//	if (!leaderboard_file.is_open()) {
+//		// create a new leaderboard file in output mode
+//
+//		// to write initial values to the file
+//		for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+//			//new_leaderboard << nickname[i] << " " << scores[i] << std::endl;
+//		}
+//
+//		// to close the new leaderboard file
+//		new_leaderboard.close();
+//	}
+//}
 
 void LeaderBoard() {
+	int scores[LEADERBOARD_SIZE] = {};
+	char** nickname = new char* [LEADERBOARD_SIZE];
+	for (int i = 0; i < LEADERBOARD_SIZE; i++)
+	{
+		nickname[i] = new char[LEADERBOARD_SIZE];
+	}
+	int dimension;
+	std::cout << "Enter dimension: ";
+	std::cin >> dimension;
+	std::fstream leaderboard("leaderboard.txt");
+	switch (dimension)
+	{
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	case 7:
+		break;
+	case 8:
+		break;
+	case 9:
+		break;
+	case 10:
+		break;
+	default:
+		break;
+	}
+	//switch case for every dimension with the following function to open or create a file corresponding to it
 
+	/*for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+		delete[] nickname[i];
+	}
+	delete[] nickname;*/
 }
 
 void startGame() {
