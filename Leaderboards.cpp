@@ -5,9 +5,12 @@
 #include "Game.h"
 #include "Helper.h"
 #include "Movements.h"
+#include <crtdbg.h>
+#define _CRTDBG_MAP_ALLOC
 
 const int LEADERBOARD_SIZE = 5;
 const int MAX_NICKNAME = 101;
+
 void strCopy(const char* from, char* to) {
 	int i = 0;
 	while (from[i] != '\0')
@@ -63,23 +66,6 @@ char* getFileName(int dimension) {
 	return filename;
 }
 
-void fillLeaderboard(char** nickname, int* scores, char* fileName) {
-	std::ifstream leaderboard;
-	leaderboard.open(fileName);
-
-	if (!leaderboard.is_open())
-	{
-		std::cout << "Error! Failed to open file\n";
-		return;
-	}
-
-	for (int i = 0; !leaderboard.eof(); ++i)
-	{
-		leaderboard >> nickname[i] >> scores[i];
-	}
-	leaderboard.close();
-}
-
 void writeToFile(char** nickname, int* scores, char* fileName) {
 	std::ofstream newLeaderboard(fileName);
 	if (!newLeaderboard.is_open()) {
@@ -92,10 +78,28 @@ void writeToFile(char** nickname, int* scores, char* fileName) {
 			newLeaderboard << nickname[i] << " " << scores[i] << " ";
 		}
 		else {
-			break;
+			newLeaderboard << "-----" << " " << scores[i] << " ";
+			
 		}
 	}
 	newLeaderboard.close();
+}
+
+void fillLeaderboard(char** nickname, int* scores, char* fileName) {
+	std::ifstream leaderboard;
+	leaderboard.open(fileName);
+
+	if (!leaderboard.is_open())
+	{
+		std::cout << "Error! Failed to open file\n";
+		return;
+	}
+
+	for (int i = 0; i < LEADERBOARD_SIZE; ++i)
+	{
+		leaderboard >> nickname[i] >> scores[i];
+	}
+	leaderboard.close();
 }
 
 void LeaderBoard(char* name, int score, int dimension) {
@@ -110,13 +114,16 @@ void LeaderBoard(char* name, int score, int dimension) {
 	updateLeaderBoard(dimension, name, score, nickname, scores);
 	writeToFile(nickname, scores, fileName);
 
-	for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+
+	/*for (int i = 0; i < LEADERBOARD_SIZE; i++) {
 		delete[] nickname[i];
 	}
 	delete[] nickname;
-	delete[] fileName;
+	delete[] fileName;*/
 }
+
 void printLeaderBoard() {
+	_CrtDumpMemoryLeaks();
 	int scores[LEADERBOARD_SIZE] = {};
 	char** nickname = new char* [LEADERBOARD_SIZE];
 	for (int i = 0; i < LEADERBOARD_SIZE; i++)
@@ -133,27 +140,23 @@ void printLeaderBoard() {
 	if (!leaderboard.is_open())
 	{
 		std::cout << "Error! Failed to open file\n";
-		for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+		/*for (int i = 0; i < LEADERBOARD_SIZE; i++) {
 			delete[] nickname[i];
 		}
 		delete[] nickname;
-		delete[] fileName;
+		delete[] fileName;*/
 		return;
 	}
 	int countOfPeople = 0;
-	for (int i = 0; !leaderboard.eof(); ++i)
+	for (int i = 0; i < LEADERBOARD_SIZE; ++i)
 	{
 		leaderboard >> nickname[i] >> scores[i];
-		if (scores[i] != 0) {
-			std::cout << nickname[i] << " " << scores[i] << std::endl;
-			countOfPeople++;
-		}
-		else {
-			break;
-		}
+		std::cout << nickname[i] << " " << scores[i] << std::endl;
 	}
 	leaderboard.close();
-
+	/*for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+		delete[] nickname[i];
+	}
 	delete[] nickname;
-	delete[] fileName;
+	delete[] fileName;*/
 }
