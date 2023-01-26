@@ -79,7 +79,6 @@ void writeToFile(char** nickname, int* scores, char* fileName) {
 		}
 		else {
 			newLeaderboard << "-----" << " " << scores[i] << " ";
-			
 		}
 	}
 	newLeaderboard.close();
@@ -115,11 +114,11 @@ void LeaderBoard(char* name, int score, int dimension) {
 	writeToFile(nickname, scores, fileName);
 
 
-	/*for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+	for (int i = 0; i < LEADERBOARD_SIZE; i++) {
 		delete[] nickname[i];
 	}
 	delete[] nickname;
-	delete[] fileName;*/
+	delete[] fileName;
 }
 
 void printLeaderBoard() {
@@ -140,11 +139,11 @@ void printLeaderBoard() {
 	if (!leaderboard.is_open())
 	{
 		std::cout << "Error! Failed to open file\n";
-		/*for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+		for (int i = 0; i < LEADERBOARD_SIZE; i++) {
 			delete[] nickname[i];
 		}
 		delete[] nickname;
-		delete[] fileName;*/
+		delete[] fileName;
 		return;
 	}
 	int countOfPeople = 0;
@@ -154,9 +153,10 @@ void printLeaderBoard() {
 		std::cout << nickname[i] << " " << scores[i] << std::endl;
 	}
 	leaderboard.close();
-	/*for (int i = 0; i < LEADERBOARD_SIZE; i++) {
+
+	for (int i = 0; i < LEADERBOARD_SIZE; i++) {
 		delete[] nickname[i];
 	}
 	delete[] nickname;
-	delete[] fileName;*/
+	delete[] fileName;
 }

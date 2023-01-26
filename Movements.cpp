@@ -9,28 +9,46 @@
 const int LEADERBOARD_SIZE = 5;
 const int MAX_NICKNAME = 101;
 
+//void mergeUp(int** arr, int size) {
+//	for (int j = 0; j < size; j++)
+//	{
+//		for (int i = 0; i < size - 1; i++)
+//		{
+//			for (int row = i + 1; row < size; row++)
+//			{
+//				if (arr[row][j] == 0)
+//				{
+//					continue;
+//				}
+//				if (arr[i][j] == 0)
+//				{
+//					arr[i][j] = arr[row][j];
+//					arr[row][j] = 0;
+//				}
+//				else if (arr[i][j] == arr[row][j])
+//				{
+//					arr[i][j] *= 2;
+//					arr[row][j] = 0;
+//					break;
+//				}
+//			}
+//		}
+//	}
+//}
+
 void mergeUp(int** arr, int size) {
-	for (int j = 0; j < size; j++)
+	for (int i = 0; i < size - 1; i++)
 	{
-		for (int i = 0; i < size - 1; i++)
+		for (int j = 0; j < size; j++)
 		{
-			for (int row = i + 1; row < size; row++)
+			if (arr[i][j] == 0)
 			{
-				if (arr[row][j] == 0)
-				{
-					continue;
-				}
-				if (arr[i][j] == 0)
-				{
-					arr[i][j] = arr[row][j];
-					arr[row][j] = 0;
-				}
-				else if (arr[i][j] == arr[row][j])
-				{
-					arr[i][j] *= 2;
-					arr[row][j] = 0;
-					break;
-				}
+				continue;
+			}
+			if (arr[i][j] == arr[i + 1][j])
+			{
+				arr[i + 1][j] = 0;
+				arr[i][j] *= 2;
 			}
 		}
 	}

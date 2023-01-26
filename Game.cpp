@@ -66,7 +66,7 @@ void afterLoss() {
 	}
 }
 
-void drawBoard(int** arr, int size) {
+void drawBoard(int** arr, int size, char* nickname) {
 	if (emptyArray(arr, size))
 	{
 		insertNewTile(arr, size);
@@ -76,20 +76,18 @@ void drawBoard(int** arr, int size) {
 	moveTiles(arr, size);
 	if (win(arr, size))
 	{
-		//LeaderBoard(name, score(arr, size), size);
 		afterWin();
 
 	}
 	else if (!checkPossibleMoves(arr, size))
 	{
-		//LeaderBoard(name, score(arr, size), size);
 		afterLoss();
 	}
 	else
 	{
 		clearConsole();
 		std::cout << "Score: " << score(arr, size) << std::endl;
-		drawBoard(arr, size);
+		drawBoard(arr, size, nickname);
 	}
 }
 
@@ -110,7 +108,7 @@ void startGame() {
 		board[i] = new int[dimension]();
 	}
 
-	drawBoard(board, dimension);
+	drawBoard(board, dimension, nickname);
 	LeaderBoard(nickname, score(board, dimension), dimension);
 
 	for (int i = 0; i < dimension; i++) {
@@ -143,6 +141,7 @@ void startMenu() {
 		startGame();
 		break;
 	case 2:
+
 		printLeaderBoard();
 		break;
 	case 3:

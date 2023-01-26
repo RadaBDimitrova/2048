@@ -26,6 +26,7 @@ void printBoard(int** arr, int size) {
 }
 
 int score(int** arr, int size) {
+	int firstTile = 2; //since you initialize the board with a tile, you need to add it to the score
 	int score = 0;
 	for (int i = 0; i < size; i++)
 	{
@@ -34,7 +35,8 @@ int score(int** arr, int size) {
 			score += arr[i][j];
 		}
 	}
-	return score + 2;
+	score += firstTile;
+	return score;
 }
 
 bool emptyArray(int** arr, int size) {
@@ -62,10 +64,10 @@ bool checkPossibleMoves(int** arr, int size) {
 			if (arr[i][j] == 0) {
 				return true;
 			}
-			if (j < size - 1 && arr[i][j] == arr[i][j + 1]) {
+			if (j < size - 1 && arr[i][j] == arr[i][j + 1]) { // if you can merge horizontally
 				return true;
 			}
-			if (i < size - 1 && arr[i][j] == arr[i + 1][j]) {
+			if (i < size - 1 && arr[i][j] == arr[i + 1][j]) { // if you can merge vertically
 				return true;
 			}
 		}
@@ -99,7 +101,6 @@ void checkInput(int& num)
 }
 
 bool win(int** arr, int size) {
-	int countEmptySlots = 0;
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
