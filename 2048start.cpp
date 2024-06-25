@@ -1,4 +1,4 @@
-/**
+/*
 *
 * Solution to course project # 4
 * Introduction to programming course
@@ -6,7 +6,8 @@
 * Winter semester 2022/2023
 *
 * @author Rada Dimitrova
-* @idnumber 8MI0600227 @compiler VS
+* @idnumber 8MI0600227
+* @compiler VS
 *
 * <Main File>
 *
