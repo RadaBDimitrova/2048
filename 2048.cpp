@@ -385,6 +385,7 @@ void updateLeaderBoard(int dimension, char* name, int score, char** nickname, in
 		}
 	}
 }
+
 char* getFileName(int dimension) {
 	char* filename = new char[20];
 	switch(dimension)
