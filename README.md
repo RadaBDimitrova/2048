@@ -8,7 +8,7 @@ Language: C++
 
 File Documentation:
 1. 2048.cpp is used for the first 10-15 commits to the repository and should be ignored unless it's for a check of the project progress.
-2. 2048inOneCPP.cpp is the main file.
+2. 2048start.cpp contains the main and starts the game.
 3. Leaderboards.cpp, Helper.cpp, Game.cpp and Movements.cpp are used to group functions to access them easier.
 4. leaderboardXX.txt where XX coresponds to the dimension (between 4 and 10) of the board corresponding to the leaderboard.
 
